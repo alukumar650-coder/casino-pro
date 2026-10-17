@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoyalVegas Pro - Ultimate Casino & Card Games</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #07090f; color: #fff; padding-bottom: 50px; }
+
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: #121622; border-bottom: 2px solid #f59e0b; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .logo { font-size: 20px; font-weight: 900; color: #f59e0b; text-shadow: 0 0 10px rgba(245,158,11,0.5); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .wallet-pill { background: #1c2233; padding: 6px 14px; border-radius: 20px; font-weight: bold; font-size: 14px; border: 1px solid #f59e0b; }
+        .bal-val { color: #22c55e; }
+        .btn-sm { padding: 6px 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; font-size: 12px; }
+        .btn-dep { background: #22c55e; color: #000; }
+        .btn-logout { background: #ef4444; color: #fff; }
+
+        .container { max-width: 600px; margin: 15px auto; padding: 0 12px; }
+
+        .auth-box { background: #121622; padding: 24px; border-radius: 16px; border: 1px solid #222b42; margin-top: 30px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.7); }
+        .auth-box h2 { color: #f59e0b; margin-bottom: 15px; font-size: 24px; }
+        .input-field { width: 100%; padding: 14px; margin: 10px 0; background: #07090f; border: 1px solid #2a3450; color: #fff; border-radius: 10px; font-size: 16px; outline: none; }
+        .input-field:focus { border-color: #f59e0b; }
+        .btn-full { width: 100%; padding: 14px; margin-top: 10px; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; background: linear-gradient(45deg, #f59e0b, #d97706); color: #000; box-shadow: 0 4px 15px rgba(245,158,11,0.4); }
+        .switch-link { margin-top: 15px; font-size: 14px; color: #94a3b8; cursor: pointer; text-decoration: underline; }
+
+        .tabs { display: flex; gap: 6px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .tab-btn { flex: 0 0 auto; padding: 10px 14px; background: #121622; border: 1px solid #222b42; color: #94a3b8; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .tab-btn.active { background: #f59e0b; color: #000; border-color: #f59e0b; box-shadow: 0 0 15px rgba(245,158,11,0.4); }
+
+        .section { display: none; }
+        .section.active { display: block; }
+
+        .card { background: #121622; padding: 18px; border-radius: 16px; margin-top: 15px; border: 1px solid #222b42; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+        .game-title { font-size: 18px; color: #f59e0b; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        
+        .aviator-screen { position: relative; height: 220px; background: radial-gradient(circle, #2d1019 0%, #07090f 100%); border-radius: 14px; border: 2px solid #4a1524; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; }
+        .multiplier { font-size: 48px; font-weight: 900; color: #fff; z-index: 2; text-shadow: 0 0 20px rgba(239,68,68,0.6); }
+        .status-banner { font-size: 14px; color: #f43f5e; margin-top: 5px; font-weight: bold; z-index: 2; }
+        .plane { font-size: 40px; position: absolute; bottom: 15px; left: 15px; transition: transform 0.1s linear; }
+
+        .game-board { background: #0b2218; border: 2px solid #059669; border-radius: 14px; padding: 20px; text-align: center; min-height: 160px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; box-shadow: inset 0 0 30px rgba(0,0,0,0.6); }
+        .cards-row { display: flex; gap: 10px; margin: 15px 0; }
+        .playing-card { background: #fff; color: #000; width: 50px; height: 75px; border-radius: 6px; font-weight: bold; display: flex; flex-direction: column; justify-content: space-between; padding: 6px; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .red { color: #dc2626; }
+        .game-result-text { font-size: 18px; font-weight: bold; margin-top: 10px; min-height: 25px; }
+
+        .btn-game { width: 100%; padding: 14px; font-size: 16px; font-weight: 900; border: none; border-radius: 10px; cursor: pointer; margin-top: 12px; background: linear-gradient(45deg, #10b981, #059669); color: #fff; box-shadow: 0 4px 15px rgba(16,185,129,0.4); }
+
+        .qr-box { text-align: center; background: #fff; color: #000; padding: 15px; border-radius: 12px; margin: 12px 0; }
+        .qr-box img { width: 160px; height: 160px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+        th, td { padding: 8px 6px; text-align: left; border-bottom: 1px solid #1c2233; }
+        th { color: #94a3b8; }
+        .win, .approved { color: #22c55e; font-weight: bold; }
+        .loss, .rejected { color: #ef4444; font-weight: bold; }
+        .pending { color: #f59e0b; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="navbar" class="navbar" style="display:none;">
+        <div class="logo">👑 ROYAL VEGAS PRO</div>
+        <div class="nav-right">
+            <div class="wallet-pill">₹<span id="userBalance" class="bal-val">0.00</span></div>
+            <button class="btn-sm btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div id="authScreen" class="auth-box">
+            <h2 id="authTitle">🔐 Casino Login</h2>
+            <p style="font-size:12px; color:#94a3b8; margin-bottom:10px;">Admin ID: <b>admin</b> / <b>admin123</b></p>
+            <input type="text" id="authUser" class="input-field" placeholder="Username">
+            <input type="text" id="authPhone" class="input-field" placeholder="Mobile Number" style="display:none;">
+            <input type="password" id="authPass" class="input-field" placeholder="Password">
+            <button class="btn-full" onclick="submitAuth()" id="authBtn">LOGIN NOW</button>
+            <div class="switch-link" onclick="toggleAuthMode()" id="authSwitch">Naya account banayein? Sign Up (₹100 Bonus)</div>
+        </div>
+
+        <div id="appScreen" style="display:none;">
+            
+            <div class="tabs">
+                <div class="tab-btn active" onclick="openTab('aviatorTab', this)">✈️ Aviator</div>
+                <div class="tab-btn" onclick="openTab('teenPattiTab', this)">🃏 Teen Patti</div>
+                <div class="tab-btn" onclick="openTab('andarBaharTab', this)">🎴 Andar Bahar</div>
+                <div class="tab-btn" onclick="openTab('callBreakTab', this)">♠️ Call Break</div>
+                <div class="tab-btn" onclick="openTab('walletTab', this)">💳 Wallet</div>
+                <div class="tab-btn" id="adminTabBtn" style="display:none;" onclick="openTab('adminTab', this)">⚙️ Admin</div>
+            </div>
+
+            <div id="aviatorTab" class="section active">
+                <div class="card">
+                    <div class="game-title">🚀 Aviator Crash X</div>
+                    <div class="aviator-screen">
+                        <div id="multiplierDisplay" class="multiplier">1.00x</div>
+                        <div id="statusText" class="status-banner">READY TO FLY</div>
+                        <div id="planeIcon" class="plane">✈️</div>
+                    </div>
+                    <label style="font-size:12px; color:#94a3b8; display:block; margin-top:12px;">Bet Amount (₹)</label>
+                    <input type="number" id="aviatorBet" class="input-field" value="50" min="10">
+                    <button id="aviatorBetBtn" class="btn-game" style="background:linear-gradient(45deg, #22c55e, #16a34a);" onclick="startAviator()">BET (START)</button>
+                    <button id="aviatorCashoutBtn" class="btn-game" style="background:linear-gradient(45deg, #f59e0b, #d97706); color:#000; display:none;" onclick="cashoutAviator()">CASHOUT</button>
+                </div>
+            </div>
+
+            <div id="teenPattiTab" class="section">
+                <div class="card">
+                    <div class="game-title">🃏 Teen Patti (3-Card Flush)</div>
+                    <div class="game-board">
+                        <div style="font-size:12px; color:#a7f3d0;">Your Hand</div>
+                        <div id="tpCards" class="cards-row">
+                            <div class="playing-card"><span>?</span><span>♠</span><span>?</span></div>
+                            <div class="playing-card"><span>?</span><span>♥</span><span>?</span></div>
+                            <div class="playing-card"><span>?</span><span>♣</span><span>?</span></div>
+                        </div>
+                        <div id="tpResult" class="game-result-text">Bet lagayein aur Chaal chlein!</div>
+                    </div>
+                    <label style="font-size:12px; color:#94a3b8; display:block; margin-top:12px;">Bet Amount (₹)</label>
+                    <input type="number" id="tpBet" class="input-field" value="50" min="10">
+                    <button class="btn-game" onclick="playTeenPatti()">PLAY TEEN PATTI (2x Win)</button>
+                </div>
+            </div>
+
+            <div id="andarBaharTab" class="section">
+                <div class="card">
+                    <div class="game-title">🎴 Andar Bahar</div>
+                    <div class="game-board">
+                        <div style="font-size:12px; color:#a7f3d0;">Joker Card: <b id="abJoker" style="font-size:18px; color:#fff;">--</b></div>
+                        <div id="abResult" class="game-result-text">Andar ya Bahar choose karein!</div>
+                    </div>
+                    <label style="font-size:12px; color:#94a3b8; display:block; margin-top:12px;">Bet Amount (₹)</label>
+                    <input type="number" id="abBet" class="input-field" value="50" min="10">
+                    <div style="display:flex; gap:10px; margin-top:12px;">
+                        <button class="btn-game" style="margin-top:0; background:#3b82f6;" onclick="playAndarBahar('Andar')">BET ANDAR (2x)</button>
+                        <button class="btn-game" style="margin-top:0; background:#ec4899;" onclick="playAndarBahar('Bahar')">BET BAHAR (2x)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="callBreakTab" class="section">
+                <div class="card">
+                    <div class="game-title">♠️ Call Break Trick Game</div>
+                    <div class="game-board">
+                        <div style="font-size:12px; color:#a7f3d0;">Target: <b>3 Tricks</b></div>
+                        <div id="cbResult" class="game-result-text">Apna Call set karein aur Deal karein!</div>
+                    </div>
+                    <label style="font-size:12px; color:#94a3b8; display:block; margin-top:12px;">Bet Amount (₹)</label>
+                    <input type="number" id="cbBet" class="input-field" value="50" min="10">
+                    <button class="btn-game" onclick="playCallBreak()">DEAL & WIN (2.5x)</button>
+                </div>
+            </div>
+
+            <div id="walletTab" class="section">
+                <div class="card">
+                    <h3 style="color:#22c55e;">➕ UPI QR Deposit</h3>
+                    <input type="number" id="depAmount" class="input-field" value="500" min="100" oninput="updateQR()">
+                    <div class="qr-box">
+                        <img id="upiQrImg" src="" alt="UPI QR">
+                        <div style="font-weight:bold; margin-top:6px;" id="displayUpiId">UPI: royal@ybl</div>
+                    </div>
+                    <input type="text" id="depUtr" class="input-field" placeholder="Enter 12-Digit UTR No.">
+                    <button class="btn-full" style="background:#22c55e; color:#000;" onclick="submitDeposit()">SUBMIT DEPOSIT</button>
+                </div>
+                <div class="card">
+                    <h3 style="color:#3b82f6;">🏦 Instant Withdrawal</h3>
+                    <input type="number" id="withAmount" class="input-field" placeholder="Amount (Min ₹100)">
+                    <input type="text" id="withUpi" class="input-field" placeholder="Your UPI ID (name@ybl)">
+                    <button class="btn-full" style="background:#3b82f6;" onclick="submitWithdraw()">REQUEST WITHDRAWAL</button>
+                </div>
+                <div class="card">
+                    <h4>📜 Transaction History</h4>
+                    <table>
+                        <thead><tr><th>Type</th><th>Amount</th><th>Ref / UPI</th><th>Status</th></tr></thead>
+                        <tbody id="txHistoryBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="adminTab" class="section">
+                <div class="card">
+                    <h3 style="color:#f59e0b;">⚙️ Casino & UPI Settings</h3>
+                    <label style="font-size:12px;">Admin UPI ID:</label>
+                    <input type="text" id="admUpiId" class="input-field">
+                    <label style="font-size:12px;">Merchant Name:</label>
+                    <input type="text" id="admMerchant" class="input-field">
+                    <button class="btn-full" style="background:#f59e0b; color:#000;" onclick="saveAdminSettings()">SAVE SETTINGS</button>
+                </div>
+                <div class="card">
+                    <h3 style="color:#22c55e;">✅ Approve Deposits / Withdrawals</h3>
+                    <table>
+                        <thead><tr><th>User</th><th>Type</th><th>Amt</th><th>Action</th></tr></thead>
+                        <tbody id="adminTxBody"></tbody>
+                    </table>
+                </div>
+                <div class="card">
+                    <h3 style="color:#3b82f6;">👥 Manage Users Balance</h3>
+                    <table>
+                        <thead><tr><th>User</th><th>Balance</th><th>Edit</th></tr></thead>
+                        <tbody id="adminUsersBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let isSignup = false;
+        let crashPoint = 1.00;
+        let currentMultiplier = 1.00;
+        let flightInterval = null;
+        let isFlying = false;
+        let merchantUpi = 'royal@ybl';
+        let merchantName = 'RoyalVegas';
+
+        function toggleAuthMode() {
+            isSignup = !isSignup;
+            document.getElementById('authTitle').innerText = isSignup ? '📝 Create Account' : '🔐 Casino Login';
+            document.getElementById('authPhone').style.display = isSignup ? 'block' : 'none';
+            document.getElementById('authBtn').innerText = isSignup ? 'SIGN UP (₹100 BONUS)' : 'LOGIN NOW';
+            document.getElementById('authSwitch').innerText = isSignup ? 'Pehle se account hai? Login' : 'Naya account? Sign Up';
+        }
+
+        async function submitAuth() {
+            const username = document.getElementById('authUser').value;
+            const password = document.getElementById('authPass').value;
+            const endpoint = isSignup ? '/api/register' : '/api/login';
+
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await res.json();
+            if (!data.success) return alert(data.message);
+
+            currentUser = data.user;
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('navbar').style.display = 'flex';
+            document.getElementById('appScreen').style.display = 'block';
+
+            if (currentUser.role === 'admin') {
+                document.getElementById('adminTabBtn').style.display = 'block';
+                loadAdminDashboard();
+            } else {
+                document.getElementById('adminTabBtn').style.display = 'none';
+            }
+            loadUserData();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('authScreen').style.display = 'block';
+            document.getElementById('navbar').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'none';
+        }
+
+        function openTab(tabId, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
+            if (tabId === 'adminTab') loadAdminDashboard();
+            else loadUserData();
+        }
+
+        async function loadUserData() {
+            if (!currentUser) return;
+            const res = await fetch(`/api/user-data/${currentUser.user_id}`);
+            const data = await res.json();
+            if (!data.success) return;
+
+            currentUser = data.user;
+            document.getElementById('userBalance').innerText = data.user.balance.toFixed(2);
+            if (data.settings) {
+                merchantUpi = data.settings.upi_id;
+                merchantName = data.settings.merchant_name;
+                updateQR();
+            }
+
+            const txBody = document.getElementById('txHistoryBody');
+            txBody.innerHTML = '';
+            data.transactions.forEach(t => {
+                txBody.innerHTML += `<tr><td>${t.type.toUpperCase()}</td><td>₹${t.amount}</td><td>${t.utr_or_upi}</td><td class="${t.status}">${t.status.toUpperCase()}</td></tr>`;
+            });
+        }
+
+        function updateQR() {
+            const amt = document.getElementById('depAmount').value || 500;
+            const upiString = `upi://pay?pa=${merchantUpi}&pn=${encodeURIComponent(merchantName)}&am=${amt}&cu=INR`;
+            document.getElementById('upiQrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(upiString)}`;
+            document.getElementById('displayUpiId').innerText = `UPI: ${merchantUpi} (₹${amt})`;
+        }
+
+        async function submitDeposit() {
+            const amount = document.getElementById('depAmount').value;
+            const utr = document.getElementById('depUtr').value;
+            const res = await fetch('/api/deposit-request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.user_id, amount, utr })
+            });
+            const data = await res.json();
+            alert(data.message);
+            if (data.success) { document.getElementById('depUtr').value = ''; loadUserData(); }
+        }
+
+        async function submitWithdraw() {
+            const amount = document.getElementById('withAmount').value;
+            const upiId = document.getElementById('withUpi').value;
+            const res = await fetch('/api/withdraw-request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.user_id, amount, upiId })
+            });
+            const data = await res.json();
+            alert(data.message);
+            if (data.success) loadUserData();
+        }
+
+        async function startAviator() {
+            const betAmount = parseFloat(document.getElementById('aviatorBet').value);
+            const res = await fetch('/api/play-game', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.user_id, game: 'aviator', betAmount })
+            });
+            const data = await res.json();
+            if (!data.success) return alert(data.message);
+
+            crashPoint = data.crashPoint;
+            currentMultiplier = 1.00;
+            isFlying = true;
+
+            document.getElementById('userBalance').innerText = data.balance.toFixed(2);
+            document.getElementById('aviatorBetBtn').style.display = 'none';
+            document.getElementById('aviatorCashoutBtn').style.display = 'block';
+            document.getElementById('statusText').innerText = 'PLANE FLYING...';
+
+            flightInterval = setInterval(async () => {
+                currentMultiplier = parseFloat((currentMultiplier + 0.05).toFixed(2));
+                document.getElementById('multiplierDisplay').innerText = currentMultiplier.toFixed(2) + 'x';
+                document.getElementById('aviatorCashoutBtn').innerText = `CASHOUT ₹${(betAmount * currentMultiplier).toFixed(0)}`;
+
+                if (currentMultiplier >= crashPoint) {
+                    clearInterval(flightInterval);
+                    isFlying = false;
+                    document.getElementById('statusText').innerText = `CRASHED @ ${crashPoint}x`;
+                    resetAviator();
+                }
+            }, 100);
+        }
+
+        async function cashoutAviator() {
+            if (!isFlying) return;
+            clearInterval(flightInterval);
+            isFlying = false;
+
+            const res = await fetch('/api/cashout-aviator', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.user_id, multiplier: currentMultiplier })
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('statusText').innerText = `WON ₹${data.payout}!`;
+                document.getElementById('userBalance').innerText = data.balance.toFixed(2);
+                resetAviator();
+            }
+        }
+
+        function resetAviator() {
+            document.getElementById('aviatorBetBtn').style.display = 'block';
+            document.getElementById('aviatorCashoutBtn').style.display = 'none';
+        }
+
+        async function playTeenPatti() {
+            const betAmount = parseFloat(document.getElementById('tpBet').value);
+            const res = await fetch('/api/play-game', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.user_id, game: 'teen_patti', betAmount })
+            });
+            const data = await res.json();
+            if (!data.success) return alert(data.message);
+
+            document.getElementById('userBalance').innerText = data.balance.toFixed(2);
+            const resBox = document.getElementById('tpResult');
+            if (data.win) {
+                resBox.innerHTML = `<span class="win">🎉 Teen Patti Win! +₹${data.payout}</span>`;
+            } else {
+                resBox.innerHTML = `<span class="loss">❌ Teen Patti Loss -₹${betAmount}</span>`;
+            }
+        }
+
+        async function playAndarBahar(choice) {
+            const betAmount = parseFloat(document.getElementById('abBet').value);
+            const res = await fetch('/api/play-game', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.user_id, game: 'andar_bahar', betAmount, choice })
+            });
+            const data = await res.json();
+            if (!data.success) return alert(data.message);
+
+            document.getElementById('abJoker').innerText = data.joker;
+            const resBox = document.getElementById('abResult');
+            if (data.win) {
+                resBox.innerHTML = `<span class="win">🎉 Won ₹${data.payout} (${data.winningSide})</span>`;
+            } else {
+                resBox.innerHTML = `<span class="loss">❌ Lost ₹${betAmount} (${data.winningSide})</span>`;
+            }
+            document.getElementById('userBalance').innerText = data.balance.toFixed(2);
+        }
+
+        async function playCallBreak() {
+            const betAmount = parseFloat(document.getElementById('cbBet').value);
+            const res = await fetch('/api/play-game', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.user_id, game: 'call_break', betAmount })
+            });
+            const data = await res.json();
+            if (!data.success) return alert(data.message);
+
+            document.getElementById('userBalance').innerText = data.balance.toFixed(2);
+            const resBox = document.getElementById('cbResult');
+            if (data.win) {
+                resBox.innerHTML = `<span class="win">♠️ Win! Tricks: ${data.tricks} (+₹${data.payout})</span>`;
+            } else {
+                resBox.innerHTML = `<span class="loss">❌ Loss. Tricks: ${data.tricks}</span>`;
+            }
+        }
+
+        async function loadAdminDashboard() {
+            const res = await fetch('/api/admin/dashboard');
+            const data = await res.json();
+            if (!data.success) return;
+
+            document.getElementById('admUpiId').value = data.settings.upi_id;
+            document.getElementById('admMerchant').value = data.settings.merchant_name;
+
+            const txBody = document.getElementById('adminTxBody');
+            txBody.innerHTML = '';
+            data.transactions.forEach(t => {
+                txBody.innerHTML += `<tr><td>${t.username}</td><td>${t.type}</td><td>₹${t.amount}</td><td><button class="btn-sm btn-dep" onclick="processTx(${t.tx_id}, 'approved')">✔</button> <button class="btn-sm btn-logout" onclick="processTx(${t.tx_id}, 'rejected')">✖</button></td></tr>`;
+            });
+
+            const uBody = document.getElementById('adminUsersBody');
+            uBody.innerHTML = '';
+            data.users.forEach(u => {
+                uBody.innerHTML += `<tr><td>${u.username}</td><td>₹${u.balance.toFixed(2)}</td><td><input type="number" id="bal_${u.user_id}" value="${u.balance}" style="width:60px; background:#000; color:#fff;"><button class="btn-sm btn-dep" onclick="updateBal(${u.user_id})">Save</button></td></tr>`;
+            });
+        }
+
+        async function processTx(txId, action) {
+            await fetch('/api/admin/transaction-action', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({txId, action}) });
+            loadAdminDashboard();
+        }
+
+        async function updateBal(userId) {
+            const newBalance = document.getElementById(`bal_${userId}`).value;
+            await fetch('/api/admin/update-balance', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({userId, newBalance}) });
+            loadAdminDashboard();
+        }
+
+        async function saveAdminSettings() {
+            const upi_id = document.getElementById('admUpiId').value;
+            const merchant_name = document.getElementById('admMerchant').value;
+            await fetch('/api/admin/settings', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({upi_id, merchant_name}) });
+            alert('Settings Saved!');
+        }
+    </script>
+</body>
+</html>
